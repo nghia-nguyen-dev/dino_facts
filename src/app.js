@@ -1,7 +1,7 @@
-"use strict";
+
 
 // Create Dino Constructor
-var x = 'Hi'; // Create Dino Objects
+// Create Dino Objects
 // Create Human Object
 // Use IIFE to get human data from form
 // Create Dino Compare Method 1
