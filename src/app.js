@@ -12,7 +12,7 @@
     })
 
     console.log(x);
-
+    return x;
 }());
 
 // Listener
@@ -35,13 +35,27 @@ submitBtn.addEventListener('click', () => {
     }
 
     const human = new Human(input)
-    console.log(human);
+
+    // Generate Tiles
+    function generateTile(obj) {
+        const div = document.createElement('div')
+
+        if (obj.name) { // Check if obj is human
+            div.innerHTML = `<h3>${obj.name}</h3>`;
+            return div;
+        } else {
+            div.innerHTML = 
+            `<h3>${obj.species}</h3>
+            <img src="./images/${obj.species.toLowerCase()}.png">
+            <p>${obj.fact}</p>`
+
+            return div;
+        }
+    }
+
+    // Append tiles to DOM
 })
 
-
-
-
-// Prototypes
 
 const dinoMethods = {
 
@@ -102,8 +116,6 @@ function Human(input) {
 // Add tiles to DOM
 // Remove form from screen
 // On button click, prepare and display infographic
-
-
 
 
 // Helper functions
