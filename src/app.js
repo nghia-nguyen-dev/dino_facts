@@ -1,36 +1,51 @@
-// Get input data from form
-const submitBtn = document.getElementById('btn')
+
+// IIFE
+(async function() {
+    const res = await fetch('../dino.json');
+    const data = await res.json();
+    const { Dinos } = data
+    console.log(Dinos);
+}());
 
 // Listener
-submitBtn.addEventListener('click', function() {
+const submitBtn = document.getElementById('btn')
+
+submitBtn.addEventListener('click', () => {
     const name = document.getElementById('name').value
     const feet = parseInt(document.getElementById('feet').value)
     const inches = parseInt(document.getElementById('inches').value)
-    const weight = document.getElementById('weight').value
+    const weight = parseInt(document.getElementById('weight').value)
     const diet = document.getElementById('diet').value
 
     const height = getHeight(feet, inches);
 
-    logInput(name,height,weight,diet)
+    const input = {
+        name,
+        height,
+        weight,
+        diet,
+    }
+
+    const human = new Human(input)
+    console.log(human);
 })
 
-// Helper functions
-function logInput(...rest) {
-    console.log(rest);
-}
-
-function feetToInches(ft) {
-    return ft * 12;
-}
-
-function getHeight(feet, inches) {
-    feet = feetToInches(feet);
-    return (feet + inches);
-}
-
 // Create Dino Constructor
+function Dinosaur(data) {
+    this.species = data.species
+    this.height = data.height
+    this.weight = data.weight
+    this.diet = data.diet
+}
 // Create Dino Objects
 // Create Human Object
+function Human(input) {
+    this.name = input.name
+    this.height = input.height
+    this.weight = input.weight
+    this.diet = input.diet
+}
+
 // Use IIFE to get human data from form
 // Create Dino Compare Method 1
 // NOTE: Weight in JSON file is in lbs, height in inches. 
@@ -46,3 +61,16 @@ function getHeight(feet, inches) {
 
 
 
+// Helper functions
+function logInput(...rest) {
+    console.log(rest);
+}
+
+function feetToInches(ft) {
+    return ft * 12;
+}
+
+function getHeight(feet, inches) {
+    feet = feetToInches(feet);
+    return (feet + inches);
+}
