@@ -34,7 +34,7 @@ submitBtn.addEventListener('click', () => {
         diet,
     }
 
-    const human = new Human(input)
+    const human = new CreateHuman(input)
 
     // Generate Tiles
     function generateTile(obj) {
@@ -98,7 +98,7 @@ const dinoMethods = {
 
 // Create Dino Objects
 // Create Human Object
-function Human(input) {
+function CreateHuman(input) {
     this.name = input.name
     this.height = input.height
     this.weight = input.weight
@@ -131,3 +131,4 @@ function getHeight(feet, inches) {
     feet = feetToInches(feet);
     return (feet + inches);
 }
+
