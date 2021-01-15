@@ -19,21 +19,8 @@
 const submitBtn = document.getElementById('btn')
 
 submitBtn.addEventListener('click', () => {
-    const name = document.getElementById('name').value
-    const feet = parseInt(document.getElementById('feet').value)
-    const inches = parseInt(document.getElementById('inches').value)
-    const weight = parseInt(document.getElementById('weight').value)
-    const diet = document.getElementById('diet').value
-
-    const height = getHeight(feet, inches);
-
-    const input = {
-        name,
-        height,
-        weight,
-        diet,
-    }
-
+    
+    const input = userInput();
     const human = new CreateHuman(input)
 
     // Generate Tiles
@@ -132,3 +119,19 @@ function getHeight(feet, inches) {
     return (feet + inches);
 }
 
+function userInput() {
+    const name = document.getElementById('name').value
+    const feet = parseInt(document.getElementById('feet').value)
+    const inches = parseInt(document.getElementById('inches').value)
+    const weight = parseInt(document.getElementById('weight').value)
+    const diet = document.getElementById('diet').value
+
+    const height = getHeight(feet, inches);
+
+    return {
+        name,
+        height,
+        weight,
+        diet,
+    }
+}
