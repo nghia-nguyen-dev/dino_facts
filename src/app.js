@@ -3,8 +3,24 @@
 (async function() {
     const res = await fetch('../dino.json');
     const data = await res.json();
-    const { Dinos } = data
-    console.log(Dinos);
+    let { dinos } = data
+    console.log(dinos);
+
+    // Example method
+    const dinoMethods = {
+        roar: function() {
+            console.log(`ROARRRRRR`)
+        }
+    }
+
+    // Attaching methods to the prototype
+    dinos = dinos.map(dino => {
+        const target = Object.create(dinoMethods)
+        return Object.assign(target, dino)
+    });
+
+    console.log(dinos);
+
 }());
 
 // Listener
@@ -36,7 +52,47 @@ function Dinosaur(data) {
     this.height = data.height
     this.weight = data.weight
     this.diet = data.diet
+    this.where = data.where
+    this.when = data.when
+    this.funFact = data.fact
 }
+
+// Prototypes
+
+Dinosaur.prototype.compareWeight = function (human) {
+    const weightDiff = Math.round(this.weight / human.weight)
+    return `Weighs about ${weightDiff} times more than you`
+}
+
+Dinosaur.prototype.compareHeight = function (human) {
+    const heightDiff = Math.round(this.height / human.height)
+    return `Is about ${heightDiff} times taller than you`
+}
+
+Dinosaur.prototype.compareDiet = function (human) {
+    if (this.diet === human.diet) {
+        return `You are both ${this.diet + `s`}`
+    } else {
+        return `Unlike you, the ${this.species} is a ${this.diet}`
+    }
+}
+
+Dinosaur.prototype.location = function () {
+    return `Lived in ${this.where}`
+}
+
+Dinosaur.prototype.timePeriod = function () {
+    return `Lived during ${this.when}`
+}
+
+Dinosaur.prototype.funFact = function () {
+    return this.funFact
+}
+
+Dinosaur.prototype.randomFact = function () {
+    
+}
+
 // Create Dino Objects
 // Create Human Object
 function Human(input) {
