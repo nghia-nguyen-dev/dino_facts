@@ -1,3 +1,6 @@
+// Global
+const submitBtn = document.getElementById('btn');
+const grid = document.getElementById('grid');
 
 // IIFE
 (async function() {
@@ -11,34 +14,23 @@
         return Object.assign(temp, dino) // copy properties from dino to temp
     })
 
+    x.forEach(dino => {
+        const dinoTile = dino.generateTile()
+        grid.appendChild(dinoTile)
+    })
     console.log(x);
-    return x;
 }());
 
 // Listener
-const submitBtn = document.getElementById('btn')
-
 submitBtn.addEventListener('click', () => {
     
-    const input = userInput();
-    const human = new CreateHuman(input)
+    const data = userInput();
+    const human = new CreateHuman(data)
+    const humanTile = human.generateTile()
+    grid.appendChild(humanTile)
 
     // Generate Tiles
-    function generateTile(obj) {
-        const div = document.createElement('div')
-
-        if (obj.name) { // Check if obj is human
-            div.innerHTML = `<h3>${obj.name}</h3>`;
-            return div;
-        } else {
-            div.innerHTML = 
-            `<h3>${obj.species}</h3>
-            <img src="./images/${obj.species.toLowerCase()}.png">
-            <p>${obj.fact}</p>`
-
-            return div;
-        }
-    }
+  
 
     // Append tiles to DOM
 })
@@ -64,16 +56,32 @@ const dinoMethods = {
         }
     },
     
-    location: function () {
+    location: function() {
         return `Lived in ${this.where}`
     },
     
-    timePeriod: function () {
+    timePeriod: function() {
         return `Lived during ${this.when}`
     },
     
-    funFact: function () {
+    funFact: function() {
         return this.fact
+    },
+
+    generateTile: function() {
+        const div = document.createElement('div')
+
+        if (this.name) { // Check if obj is human
+            div.innerHTML = `<h3>${this.name}</h3>`;
+            return div;
+        } else {
+            div.innerHTML = 
+            `<h3>${this.species}</h3>
+            <img src="./images/${this.species.toLowerCase()}.png">
+            <p>${this.fact}</p>`
+
+            return div;
+        }
     },
     
     // randomFact: function () {
@@ -83,7 +91,6 @@ const dinoMethods = {
 
 
 
-// Create Dino Objects
 // Create Human Object
 function CreateHuman(input) {
     this.name = input.name
@@ -92,18 +99,12 @@ function CreateHuman(input) {
     this.diet = input.diet
 }
 
-// Use IIFE to get human data from form
-// Create Dino Compare Method 1
-// NOTE: Weight in JSON file is in lbs, height in inches. 
-// Create Dino Compare Method 2
-// NOTE: Weight in JSON file is in lbs, height in inches.
-// Create Dino Compare Method 3
-// NOTE: Weight in JSON file is in lbs, height in inches.
-// Generate Tiles for each Dino in Array
-// Add tiles to DOM
-// Remove form from screen
-// On button click, prepare and display infographic
-
+CreateHuman.prototype.generateTile = function() {
+    const div = document.createElement('div')
+    
+    div.innerHTML = `<h3>${this.name}</h3> <img src="./images/human.png">`;
+    return div;
+}
 
 // Helper functions
 function logInput(...rest) {
@@ -135,3 +136,4 @@ function userInput() {
         diet,
     }
 }
+
