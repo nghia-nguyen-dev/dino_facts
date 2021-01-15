@@ -9,21 +9,24 @@ submitBtn.addEventListener('click', function() {
     const weight = document.getElementById('weight').value
     const diet = document.getElementById('diet').value
 
-    logToConsole(name,feet,inches,weight,diet)
+    const height = getHeight(feet, inches);
+
+    logInput(name,height,weight,diet)
 })
 
 // Helper functions
-function logToConsole(...rest) {
-    console.log(rest)
+function logInput(...rest) {
+    console.log(rest);
 }
-
-
 
 function feetToInches(ft) {
-
+    return ft * 12;
 }
 
-
+function getHeight(feet, inches) {
+    feet = feetToInches(feet);
+    return (feet + inches);
+}
 
 // Create Dino Constructor
 // Create Dino Objects
