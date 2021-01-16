@@ -2,37 +2,39 @@
 const submitBtn = document.getElementById('btn');
 const grid = document.getElementById('grid');
 
-// Fetch
-async function fetchDinoData() {
-
-    const res = await fetch('../dino.json');
-    const data = await res.json();
-    const { dinos } = data
-
-    return dinos;
-};
-
-function createPrototypeBond(dinos) {
-
-    return dinos.map(dino => {
-        const temp = Object.create(dinoMethods) // return new object with link to dinoMethods' prototype
-        return Object.assign(temp, dino) // copy properties from dino to temp
-    })
-
-}
-
 // Listener
 submitBtn.addEventListener('click', async () => {
 
     const data = getUserInput();
-    const human = new CreateHuman(data)
-    const humanTile = human.generateTile()
+    const human = new CreateHuman(data);
+    const humanTile = human.generateTile();
 
     let dinos = await fetchDinoData();
     dinos = createPrototypeBond(dinos);
 
-    shuffleArray(dinos)
+    shuffleArray(dinos);
 
+    const dinoTiles = []
+
+    // QUESTIONS TO CONSIDERED
+    // Maybe loop through the function array instead of dinos?
+    // Should generate tile be a method or stand alone func?
+    const compareFunctions = [`compareWeight`,`compareHeight`,`compareDiet`]
+
+    compareFunctions.forEach(func => {
+        const fact = dinos[0][func](human);
+        const tile = dinos[0].generateTile(fact)
+        dinoTiles.push(tile)
+        dinos.shift()
+    })
+
+    console.log(dinoTiles);
+
+    // Compare with human data
+    // Generate tiles
+    // Append tiles to DOM
+    // Insert human tile after/before nth div
+    // Handle pigeon fact
 })
 
 const dinoMethods = {
@@ -71,16 +73,14 @@ const dinoMethods = {
         const div = document.createElement('div')
 
         div.innerHTML =
-            `<h3>${this.species}</h3>
+        `<h3>${this.species}</h3>
         <img src="./images/${this.species.toLowerCase()}.png">
-        <p>${fact}</p>`
+        <p>${fact}</p>`;
 
         return div;
     },
 
-    getRandomFact: function () {
-
-    }
+    getRandomFact: function () {},
 
 }
 
@@ -94,8 +94,9 @@ function CreateHuman(input) {
 
 CreateHuman.prototype.generateTile = function () {
     const div = document.createElement('div')
-
-    div.innerHTML = `<h3>${this.name}</h3> <img src="./images/human.png">`;
+    div.innerHTML =
+    `<h3>${this.name}</h3>
+    <img src="./images/human.png">`;
     return div;
 }
 
@@ -133,4 +134,20 @@ function shuffleArray(array) {
         array[i] = array[j]
         array[j] = temp
     }
+}
+
+async function fetchDinoData() {
+    const res = await fetch('../dino.json');
+    const data = await res.json();
+    const { dinos } = data
+
+    return dinos;
+};
+
+function createPrototypeBond(dinos) {
+    return dinos.map(dino => {
+        const temp = Object.create(dinoMethods) // return new object with link to dinoMethods' prototype
+        return Object.assign(temp, dino) // copy properties from dino to temp
+    })
+
 }
