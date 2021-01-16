@@ -4,11 +4,11 @@ const grid = document.getElementById('grid');
 
 // Fetch
 async function fetchDinoData() {
-    
+
     const res = await fetch('../dino.json');
     const data = await res.json();
     const { dinos } = data
-  
+
     return dinos;
 };
 
@@ -27,23 +27,13 @@ submitBtn.addEventListener('click', async () => {
     const data = getUserInput();
     const human = new CreateHuman(data)
     const humanTile = human.generateTile()
-    
+
     let dinos = await fetchDinoData();
     dinos = createPrototypeBond(dinos);
 
-    // const dinoTiles = dinos.map(dino => {
-    //     return dino.generateTile(human)
-    // })
-
     shuffleArray(dinos)
-  
-    dinos.compareWithHuman()
 
-    function compareWithHuman() {
-        
-    }
 })
-
 
 const dinoMethods = {
 
@@ -56,7 +46,7 @@ const dinoMethods = {
         const heightDiff = Math.round(this.height / human.height)
         return `Is about ${heightDiff} times taller than you`
     },
-    
+
     compareDiet: function (human) {
         if (this.diet === human.diet.toLowerCase()) {
             return `You are both ${this.diet + `s`}`
@@ -64,35 +54,34 @@ const dinoMethods = {
             return `Unlike you, the ${this.species} is a ${this.diet}`
         }
     },
-    
-    location: function() {
+
+    location: function () {
         return `Lived in ${this.where}`
     },
-    
-    timePeriod: function() {
+
+    timePeriod: function () {
         return `Lived during ${this.when} time period`
     },
-    
-    defaultFact: function() {
+
+    defaultFact: function () {
         return this.fact
     },
 
-    generateTile: function() {
+    generateTile: function (fact) {
         const div = document.createElement('div')
 
-        div.innerHTML = 
-        `<h3>${this.species}</h3>
+        div.innerHTML =
+            `<h3>${this.species}</h3>
         <img src="./images/${this.species.toLowerCase()}.png">
-        <p>${this.fact}</p>`
+        <p>${fact}</p>`
 
         return div;
     },
 
-    getRandomFact: function() {
+    getRandomFact: function () {
 
     }
-    
- 
+
 }
 
 // Human constructor
@@ -103,9 +92,9 @@ function CreateHuman(input) {
     this.diet = input.diet
 }
 
-CreateHuman.prototype.generateTile = function() {
+CreateHuman.prototype.generateTile = function () {
     const div = document.createElement('div')
-    
+
     div.innerHTML = `<h3>${this.name}</h3> <img src="./images/human.png">`;
     return div;
 }
@@ -143,5 +132,5 @@ function shuffleArray(array) {
         const temp = array[i]
         array[i] = array[j]
         array[j] = temp
-      }
+    }
 }
