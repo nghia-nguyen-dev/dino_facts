@@ -1,38 +1,47 @@
-// Global
+// Global variables
 const submitBtn = document.getElementById('btn');
 const grid = document.getElementById('grid');
 
-// IIFE
-(async function() {
+// Fetch
+async function fetchDinoData() {
+    
     const res = await fetch('../dino.json');
     const data = await res.json();
     const { dinos } = data
   
-    // Create link to dinoMethods prototype
-    const x = dinos.map(dino => {
+    return dinos;
+};
+
+function createPrototypeBond(dinos) {
+
+    return dinos.map(dino => {
         const temp = Object.create(dinoMethods) // return new object with link to dinoMethods' prototype
         return Object.assign(temp, dino) // copy properties from dino to temp
     })
 
-    x.forEach(dino => {
-        const dinoTile = dino.generateTile()
-        grid.appendChild(dinoTile)
-    })
-    console.log(x);
-}());
+}
 
 // Listener
-submitBtn.addEventListener('click', () => {
-    
-    const data = userInput();
+submitBtn.addEventListener('click', async () => {
+
+    const data = getUserInput();
     const human = new CreateHuman(data)
     const humanTile = human.generateTile()
-    grid.appendChild(humanTile)
+    
+    let dinos = await fetchDinoData();
+    dinos = createPrototypeBond(dinos);
 
-    // Generate Tiles
+    // const dinoTiles = dinos.map(dino => {
+    //     return dino.generateTile(human)
+    // })
+
+    shuffleArray(dinos)
   
+    dinos.compareWithHuman()
 
-    // Append tiles to DOM
+    function compareWithHuman() {
+        
+    }
 })
 
 
@@ -42,14 +51,14 @@ const dinoMethods = {
         const weightDiff = Math.round(this.weight / human.weight)
         return `Weighs about ${weightDiff} times more than you`
     },
-    
+
     compareHeight: function (human) {
         const heightDiff = Math.round(this.height / human.height)
         return `Is about ${heightDiff} times taller than you`
     },
     
     compareDiet: function (human) {
-        if (this.diet === human.diet) {
+        if (this.diet === human.diet.toLowerCase()) {
             return `You are both ${this.diet + `s`}`
         } else {
             return `Unlike you, the ${this.species} is a ${this.diet}`
@@ -61,37 +70,32 @@ const dinoMethods = {
     },
     
     timePeriod: function() {
-        return `Lived during ${this.when}`
+        return `Lived during ${this.when} time period`
     },
     
-    funFact: function() {
+    defaultFact: function() {
         return this.fact
     },
 
     generateTile: function() {
         const div = document.createElement('div')
 
-        if (this.name) { // Check if obj is human
-            div.innerHTML = `<h3>${this.name}</h3>`;
-            return div;
-        } else {
-            div.innerHTML = 
-            `<h3>${this.species}</h3>
-            <img src="./images/${this.species.toLowerCase()}.png">
-            <p>${this.fact}</p>`
+        div.innerHTML = 
+        `<h3>${this.species}</h3>
+        <img src="./images/${this.species.toLowerCase()}.png">
+        <p>${this.fact}</p>`
 
-            return div;
-        }
+        return div;
     },
+
+    getRandomFact: function() {
+
+    }
     
-    // randomFact: function () {
-        
-    // },
+ 
 }
 
-
-
-// Create Human Object
+// Human constructor
 function CreateHuman(input) {
     this.name = input.name
     this.height = input.height
@@ -107,10 +111,6 @@ CreateHuman.prototype.generateTile = function() {
 }
 
 // Helper functions
-function logInput(...rest) {
-    console.log(rest);
-}
-
 function feetToInches(ft) {
     return ft * 12;
 }
@@ -120,7 +120,7 @@ function getHeight(feet, inches) {
     return (feet + inches);
 }
 
-function userInput() {
+function getUserInput() {
     const name = document.getElementById('name').value
     const feet = parseInt(document.getElementById('feet').value)
     const inches = parseInt(document.getElementById('inches').value)
@@ -137,3 +137,11 @@ function userInput() {
     }
 }
 
+function shuffleArray(array) {
+    for (let i = (array.length - 1); i > 0; i--) {
+        const j = Math.floor(Math.random() * i)
+        const temp = array[i]
+        array[i] = array[j]
+        array[j] = temp
+      }
+}
