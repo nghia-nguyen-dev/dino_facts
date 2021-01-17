@@ -7,6 +7,12 @@ submitBtn.addEventListener('click', async () => {
     const dinoTiles = []
     const data = getUserInput();
 
+    // Checker for height and weight
+    if (isNaN(data.height) || isNaN(data.weight)) {
+        alert('Your height and weight cannot be empty. Please enter again')
+        return;
+    }
+  
     // 1. Create human object 2. Generate tile
     const human = new CreateHuman(data);
     const humanTile = generateTile(human);
@@ -96,6 +102,8 @@ function feetToInches(ft) {
 }
 
 function getHeight(feet, inches) {
+    isNaN(feet)? feet = 0: null
+    isNaN(inches)? inches = 0: null
     feet = feetToInches(feet);
     return (feet + inches);
 }
@@ -108,6 +116,7 @@ function getUserInput() {
     const inches = parseInt(document.getElementById('inches').value)
     const weight = parseInt(document.getElementById('weight').value)
     const diet = document.getElementById('diet').value
+
 
     // Height and weight must be required to move forward
     
