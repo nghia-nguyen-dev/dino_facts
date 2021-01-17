@@ -4,7 +4,7 @@ const grid = document.getElementById('grid');
 
 // Listener
 submitBtn.addEventListener('click', async () => {
-
+    const dinoTiles = []
     const data = getUserInput();
     const human = new CreateHuman(data);
     const humanTile = human.generateTile();
@@ -12,29 +12,35 @@ submitBtn.addEventListener('click', async () => {
     let dinos = await fetchDinoData();
     dinos = createPrototypeBond(dinos);
 
+    // 1. Filter out pigeon 2. Generate tile 3. Push into tiles array
+    const pigeon = dinos.pop()
+    const fact = pigeon.defaultFact()
+    const pigeonTile = generateTile(pigeon,fact)
+    dinoTiles.push(pigeonTile)
+
     shuffleArray(dinos);
 
-    const dinoTiles = []
+    // 1. Build out method list(strings) 2.Append 1 random method to the end
+    const methodsNames = Object.keys(dinoMethods)
+    const randomMethod = getRandomMethod(methodsNames)
+    methodsNames.push(randomMethod)
 
-    // QUESTIONS TO CONSIDERED
-    // Maybe loop through the function array instead of dinos?
-    // Should generate tile be a method or stand alone func?
-    const compareFunctions = [`compareWeight`,`compareHeight`,`compareDiet`]
+    // 1. Generate tile for each method in the array 2. Push into tiles array 3. Remove from dinos array
+    methodsNames.forEach(method => {
+        const fact = dinos[0][method](human);
+        const tile = generateTile(dinos[0], fact)
 
-    compareFunctions.forEach(func => {
-        const fact = dinos[0][func](human);
-        const tile = dinos[0].generateTile(fact)
-        dinoTiles.push(tile)
+        dinoTiles.push(tile);
         dinos.shift()
     })
 
-    console.log(dinoTiles);
+    shuffleArray(dinoTiles) // Else pigeon tile will always be the first
+   
+    // Insert human tile
+    dinoTiles.splice(4, 0, humanTile)
+    // Append to DOM
+    dinoTiles.forEach(tile => grid.appendChild(tile))
 
-    // Compare with human data
-    // Generate tiles
-    // Append tiles to DOM
-    // Insert human tile after/before nth div
-    // Handle pigeon fact
 })
 
 const dinoMethods = {
@@ -68,19 +74,6 @@ const dinoMethods = {
     defaultFact: function () {
         return this.fact
     },
-
-    generateTile: function (fact) {
-        const div = document.createElement('div')
-
-        div.innerHTML =
-        `<h3>${this.species}</h3>
-        <img src="./images/${this.species.toLowerCase()}.png">
-        <p>${fact}</p>`;
-
-        return div;
-    },
-
-    getRandomFact: function () {},
 
 }
 
@@ -117,6 +110,8 @@ function getUserInput() {
     const weight = parseInt(document.getElementById('weight').value)
     const diet = document.getElementById('diet').value
 
+    // Height and weight  must be required to move forward
+
     const height = getHeight(feet, inches);
 
     return {
@@ -150,4 +145,21 @@ function createPrototypeBond(dinos) {
         return Object.assign(temp, dino) // copy properties from dino to temp
     })
 
+}
+
+function generateTile(dino, fact) {
+    const div = document.createElement('div')
+    const name = dino.species
+
+    div.innerHTML =
+    `<h3>${name}</h3>
+    <img src="./images/${name.toLowerCase()}.png">
+    <p>${fact}</p>`;
+
+    return div;
+}
+
+function getRandomMethod(array) {
+    const index = Math.floor(Math.random() * array.length);
+    return array[index];
 }
