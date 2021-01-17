@@ -62,8 +62,11 @@ const dinoMethods = {
     },
 
     compareHeight: function (human) {
-        const heightDiff = Math.round(this.height / human.height)
-        return `Is about ${heightDiff} times taller than you`
+        console.log(this.height, human.height);
+        if (this.height < human.height) {
+            return `You are ${(human.height / this.height).toFixed(1)} times taller than a ${this.species}`
+        }
+        return `Is about ${(this.height / human.height).toFixed(1)} times taller than you`
     },
 
     compareDiet: function (human) {
@@ -104,7 +107,7 @@ function feetToInches(ft) {
 function getHeight(feet, inches) {
     isNaN(feet)? feet = 0: null
     isNaN(inches)? inches = 0: null
-    feet = feetToInches(feet);
+    feet = feetToInches(feet); 
     return (feet + inches);
 }
 
