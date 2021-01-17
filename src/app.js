@@ -6,6 +6,8 @@ const grid = document.getElementById('grid');
 submitBtn.addEventListener('click', async () => {
     const dinoTiles = []
     const data = getUserInput();
+
+    // 1. Create human object 2. Generate tile
     const human = new CreateHuman(data);
     const humanTile = generateTile(human);
 
@@ -38,6 +40,7 @@ submitBtn.addEventListener('click', async () => {
    
     // Insert human tile
     dinoTiles.splice(4, 0, humanTile)
+
     // Append to DOM
     dinoTiles.forEach(tile => grid.appendChild(tile))
 
@@ -98,14 +101,16 @@ function getHeight(feet, inches) {
 }
 
 function getUserInput() {
-    const name = document.getElementById('name').value
+    let name = document.getElementById('name').value
+    name === ''? name = 'You': null // Fallaback if name field is empty
+
     const feet = parseInt(document.getElementById('feet').value)
     const inches = parseInt(document.getElementById('inches').value)
     const weight = parseInt(document.getElementById('weight').value)
     const diet = document.getElementById('diet').value
 
-    // Height and weight  must be required to move forward
-
+    // Height and weight must be required to move forward
+    
     const height = getHeight(feet, inches);
 
     return {
