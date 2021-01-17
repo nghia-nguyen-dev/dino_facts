@@ -7,7 +7,7 @@ submitBtn.addEventListener('click', async () => {
     const dinoTiles = []
     const data = getUserInput();
     const human = new CreateHuman(data);
-    const humanTile = human.generateTile();
+    const humanTile = generateTile(human);
 
     let dinos = await fetchDinoData();
     dinos = createPrototypeBond(dinos);
@@ -87,15 +87,6 @@ function CreateHuman(input) {
     this.diet = input.diet
 }
 
-CreateHuman.prototype.generateTile = function () {
-    const div = document.createElement('div')
-    div.classList.add('grid-item')
-    div.innerHTML =
-    `<h3>${this.name}</h3>
-    <img src="./images/human.png">`;
-    return div;
-}
-
 // Helper functions
 function feetToInches(ft) {
     return ft * 12;
@@ -150,14 +141,22 @@ function createPrototypeBond(dinos) {
 
 }
 
-function generateTile(dino, fact) {
+function generateTile(obj, fact) {
     const div = document.createElement('div')
     div.classList.add('grid-item')
-    const name = dino.species
+
+    if (obj.name) {
+        const div = document.createElement('div')
+        div.classList.add('grid-item')
+        div.innerHTML =
+        `<h3>${obj.name}</h3>
+        <img src="./images/human.png">`;
+        return div;
+    }
 
     div.innerHTML =
-    `<h3>${name}</h3>
-    <img src="./images/${name.toLowerCase()}.png">
+    `<h3>${obj.species}</h3>
+    <img src="./images/${obj.species.toLowerCase()}.png">
     <p>${fact}</p>`;
 
     return div;
