@@ -7,7 +7,7 @@ submitBtn.addEventListener('click', async () => {
     const dinoTiles = []
     const data = getUserInput();
 
-    // Checker for height and weight
+    // Check that height and weight is not NaN
     if (isNaN(data.height) || isNaN(data.weight)) {
         alert('Your height and weight cannot be empty. Please enter again')
         return;
@@ -54,6 +54,7 @@ submitBtn.addEventListener('click', async () => {
     document.querySelector('form').style.display = 'none'
 })
 
+// Add to prototype object via Object.create()
 const dinoMethods = {
 
     compareWeight: function (human) {
@@ -62,7 +63,6 @@ const dinoMethods = {
     },
 
     compareHeight: function (human) {
-        console.log(this.height, human.height);
         if (this.height < human.height) {
             return `You are ${(human.height / this.height).toFixed(1)} times taller than a ${this.species}`
         }
@@ -120,9 +120,6 @@ function getUserInput() {
     const weight = parseInt(document.getElementById('weight').value)
     const diet = document.getElementById('diet').value
 
-
-    // Height and weight must be required to move forward
-    
     const height = getHeight(feet, inches);
 
     return {
@@ -155,26 +152,22 @@ function createPrototypeBond(dinos) {
         const temp = Object.create(dinoMethods) // return new object with link to dinoMethods' prototype
         return Object.assign(temp, dino) // copy properties from dino to temp
     })
-
 }
 
 function generateTile(obj, fact) {
     const div = document.createElement('div')
     div.classList.add('grid-item')
 
-    if (obj.name) {
-        const div = document.createElement('div')
-        div.classList.add('grid-item')
+    if (obj.name) { // Check if object is human
         div.innerHTML =
         `<h3>${obj.name}</h3>
         <img src="./images/human.png">`;
-        return div;
+    } else {
+        div.innerHTML =
+        `<h3>${obj.species}</h3>
+        <img src="./images/${obj.species.toLowerCase()}.png">
+        <p>${fact}</p>`;
     }
-
-    div.innerHTML =
-    `<h3>${obj.species}</h3>
-    <img src="./images/${obj.species.toLowerCase()}.png">
-    <p>${fact}</p>`;
 
     return div;
 }
