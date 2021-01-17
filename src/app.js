@@ -41,6 +41,8 @@ submitBtn.addEventListener('click', async () => {
     // Append to DOM
     dinoTiles.forEach(tile => grid.appendChild(tile))
 
+    // Hide form
+    document.querySelector('form').style.display = 'none'
 })
 
 const dinoMethods = {
