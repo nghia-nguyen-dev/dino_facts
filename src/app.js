@@ -89,6 +89,7 @@ function CreateHuman(input) {
 
 CreateHuman.prototype.generateTile = function () {
     const div = document.createElement('div')
+    div.classList.add('grid-item')
     div.innerHTML =
     `<h3>${this.name}</h3>
     <img src="./images/human.png">`;
@@ -151,6 +152,7 @@ function createPrototypeBond(dinos) {
 
 function generateTile(dino, fact) {
     const div = document.createElement('div')
+    div.classList.add('grid-item')
     const name = dino.species
 
     div.innerHTML =
