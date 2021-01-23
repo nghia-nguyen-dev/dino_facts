@@ -4,6 +4,7 @@ const grid = document.getElementById('grid');
 
 // Listener
 submitBtn.addEventListener('click', async () => {
+    const df = new DocumentFragment
     const dinoTiles = []
     const data = getUserInput();
 
@@ -47,8 +48,9 @@ submitBtn.addEventListener('click', async () => {
     // Insert human tile
     dinoTiles.splice(4, 0, humanTile)
 
-    // Append to DOM
-    dinoTiles.forEach(tile => grid.appendChild(tile))
+    // Append to document fragment, then to DOM
+    dinoTiles.forEach(tile => df.appendChild(tile))
+    grid.appendChild(df)
 
     // Hide form
     document.querySelector('form').style.display = 'none'
